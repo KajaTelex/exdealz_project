@@ -1,18 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
     const otp = sequelize.define("otps", {
-        mobile_number : {
+        mobileNumber : {
             type : DataTypes.STRING
         },
-
         otp : {
             type : DataTypes.STRING
         },
-
         isVerified : {
-            type : DataTypes.BOOLEAN,
-            defaultValue: false       
-         }
+            type : DataTypes.BOOLEAN,       
+        }
     })
-
     return otp;
 }

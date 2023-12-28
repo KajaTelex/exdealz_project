@@ -43,7 +43,7 @@ async function init() {
 init();
 
 
-database.instanceSequelize.sync({force: false})
+database.instanceSequelize.sync()
 .then(() => {
     console.log("model is synchronised properly");
 })

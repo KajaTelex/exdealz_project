@@ -2,130 +2,96 @@ const database = require("../../config/database_config");
 
 const otpSendApiController = async (req , res) => {
    try { 
-    const { mobile_number } = req.body;
-
-    if(!mobile_number) {
-        res.status(401).json({
-            status: "failure",
-            message: "Please provide a valid mobile number",
-         
-        });
-        
-        
-    } else {
-        function generateOtp() {
-            const otp_length = 6;
-            let otp = "";
-            for(let i=0; i<otp_length; i++) {
-                otp += Math.floor(Math.random() * 10); // 0 t0 9 digits generate and += add sring digit to next degit
+    //generating random otp numbers
+    let generatedOtp = Math.floor(100000 + Math.random() * 900000);
+    let otp = generatedOtp.toString();
+    //console.log(typeof(otp));
+    const { mobileNumber } = req?.body;
+    //console.log(typeof(mobileNumber));
+    if(mobileNumber){
+        const isDataExists = await database.models.otp_model.findOne({
+            where:{
+                mobileNumber: mobileNumber
             }
-            return otp;
-        }
-    
-        const otp = generateOtp();
-        console.log(`six digit otp is ${otp} `);
-    
-      const isdata_exists =await database.models.otp_model.findOne({
-        where : {
-            mobile_number : mobile_number
-        }
-
-      })
-
-      console.log(" checking data ===============================", isdata_exists);
-
-      if(isdata_exists === null){
-        const create_otp = await database.models.otp_model.create({mobile_number, otp});
-
-        res.status(201).json({
-            status : "success",
-            message : "otp send successfully",
-            create_otp_data :create_otp
         })
-          
-      } else {
-               await database.models.otp_model.update({ otp},{
-            where : {
-                mobile_number : mobile_number
-            }
-        });
-        const data =await database.models.otp_model.findOne({
-            where : {
-                mobile_number : mobile_number
-            }
-    
-          })
-        res.status(201).json({
-            status : "success",
-            message : "otp update send successfully",
-            create_otp_data :data
-        })
-      }
-
-
+        console.log("=========checking if the mobileNumber already exists========",isDataExists);
+        if(isDataExists === null){
+            const createOtp = await database.models.otp_model.create({mobileNumber, otp, isVerified: false});
+            res.status(201).json({
+                status : "success",
+                message : "otp send successfully",
+                otp_data : createOtp
+            })
+        }else{
+            await database.models.otp_model.update({otp: otp},{
+                where:{
+                    mobileNumber: mobileNumber
+                }
+            })
+            const data = await database.models.otp_model.findOne({
+                where: {
+                    mobileNumber: mobileNumber
+                }
+            })
+            res.status(201).json({
+                status: "success",
+                message: "otp sent successfully",
+                create_otp_data: data
+            })
+        }
     }
-   } catch(error) {
+    else{
+        res.status(400).json({
+            status: "failure",
+            message: "Please provide a valid Mobile Number"
+        })
+    }
+   }catch(error){
     res.status(401).json({
         status : "failure",
-        message : "OTP not send successfully ,resend the OTP",
+        message : "Otp not send successfully,resend the Otp",
     })
-    console.log("error is ",error);
    }
 } 
 
-
-
-  const otpVerifyApiController = async (req , res) => {
+const otpVerifyApiController = async(req,res) => {
     try{
-        const mobileNumber = req.body.mobile_number;
-        const verifyOtp =  req.body.otp;
-        
-        if (!mobileNumber) {
-            res.status(401).json({
+        const {mobileNumber,verifyOtp} = req?.body;
+        if(!mobileNumber){
+            res.status(400).json({
                 status: "failure",
-                message: "Please provide a valid mobile number",
-         
+                message: "Please provide a valid Mobile Number",
             });
-           
-        } else if( !verifyOtp) {
-
-            res.status(401).json({
+        }else if(!verifyOtp){
+            res.status(400).json({
             status: "failure",
-             message: "Please enter a valid OTP", // null, undefined, NaN, 0, false, and empty string
+             message: "Please enter a valid Otp", 
             })
-    
-        } else  {
-          
-            const otp_record = await database.models.otp_model
-            .findOne({
-               where : {
-                  mobile_number : mobileNumber,
-                
-               } 
-            })
-                 
-            const otp_update = await database.models.otp_model
+        }else{
+            await database.models.otp_model
             .update({
                 isVerified : true
             },{
                where : {
-                  mobile_number : mobileNumber,
-                
+                  mobileNumber : mobileNumber,
                } 
             })
+            const otp_record = await database.models.otp_model
+            .findOne({
+               where : {
+                  mobileNumber : mobileNumber
+               } 
+            });
             res.status(200).json({
                 status: "success",
                 message: "OTP verified successfully",
-                
+                update_otp_data: otp_record
             });
-
         }
-         
-        
     } catch(error) {
         res.status(404).json({
             status : "failure",
-            message : "An error occurred while verifying OTP",
+            message : "Otp verification has failed, Please try again!",
         })
     }
 }

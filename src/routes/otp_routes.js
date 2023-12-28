@@ -3,9 +3,9 @@ const router = express.Router();
 
 const otpControllers = require("../../src/controllers/otpControllers");
 
-router.post("/create_otp_send_api", otpControllers.otpSendApiController);
+router.post("/generateOtp", otpControllers.otpSendApiController);
 
-router.post("/verify_otp_api", otpControllers.otpVerifyApiController);
+router.post("/verifyOtp", otpControllers.otpVerifyApiController);
 
 
 module.exports = router;
