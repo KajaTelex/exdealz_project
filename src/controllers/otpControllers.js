@@ -47,7 +47,7 @@ const otpSendApiController = async (req , res) => {
         })
     }
    }catch(error){
-    res.status(401).json({
+    res.status(400).json({
         status : "failure",
         message : "Otp not send successfully,resend the Otp",
     })
@@ -89,7 +89,7 @@ const otpVerifyApiController = async(req,res) => {
             });
         }
     } catch(error) {
-        res.status(404).json({
+        res.status(400).json({
             status : "failure",
             message : "Otp verification has failed, Please try again!",
         })
