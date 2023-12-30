@@ -46,9 +46,9 @@ const otpVerifyApiController = async(req,res) => {
     try{
         const {mobileNumber,verifyOtp} = req?.body;
         if(!mobileNumber){
-            res.status(400).json(failureResponse);
+            res.status(400).json(failureResponse("failure","Please provide your Mobile Number"));
         }else if(!verifyOtp){
-            res.status(400).json(failureResponse)
+            res.status(400).json(failureResponse("failure","Please provide Otp"));
         }else{
             await database.models.otp_model
             .update({
@@ -64,10 +64,10 @@ const otpVerifyApiController = async(req,res) => {
                   mobileNumber : mobileNumber
                } 
             });
-            res.status(200).json(successResponse);
+            res.status(200).json(successResponse("success","Otp Verified Successfully",otp_record));
         }
     } catch(error) {
-        res.status(400).json(failureResponse)
+        res.status(500).json(failureResponse("failure","Something went wrong"));
     }
 }
 
