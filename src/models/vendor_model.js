@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
 
 const vendor = sequelize.define("vendor", {
     mobile_number : {
-        type : DataTypes.STRING
+        type : DataTypes.STRING,
+        
     },
 
     busineses_name : {

@@ -7,7 +7,9 @@ router.post("/createRegistrationApi",vendorController.registartionVendorApi);
 
 router.put("/updateRegistartionApi/:mobile_number", vendorController.updateVendorApi);
 
-router.delete("/deteteByNameVendorApi/:owner_name", vendorController.deteteByNameVendorApi);
+router.delete("/deteteByMobVendorApi/:mobile_number", vendorController.deteteByMobVendorApi);
+
+router.post("/createLogiApi", vendorController.loginVendorApi);
 
 
 module.exports = router;  

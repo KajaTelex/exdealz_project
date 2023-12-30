@@ -4,9 +4,11 @@ const { successResponse, failureResponse } = require("../utility/utility");
 
 const registartionVendorApi = async (req , res ) => {
     try{
-        const {mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image} = req.body;
+        const {mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status} = req.body;
 
-        const isMobileNum_exists =await database.models.vendor_model.findOne({
+        const shop_image = req.body.shop_image;
+        const profile_image = req.body.profile_image;
+       /*const isMobileNum_exists =await database.models.vendor_model.findOne({
             where : {
                 mobile_number : mobile_number
             }
@@ -14,7 +16,7 @@ const registartionVendorApi = async (req , res ) => {
           });
 
           console.log(" checking data ===============================", isMobileNum_exists);
-
+*/
 
 
     if(!mobile_number) {
@@ -76,7 +78,6 @@ const updateVendorApi = async (req, res) => {
       // Update the CodReffer
       const updateVendorData = await database.models.vendor_model.update(
         { al_CodReferre: Al_CodReferre,
-            status : true
         
         },
         {
@@ -95,17 +96,17 @@ const updateVendorApi = async (req, res) => {
     }
   }
   
-  const deteteByNameVendorApi = async (req, res) => {
+  const deteteByMobVendorApi = async (req, res) => {
     try {
-         const owner_name = req.params.owner_name;
+         const mobile_number = req.params.mobile_number;
 
          const deletedVendorData =  await database.models.vendor_model.destroy({
             where :{
-                owner_name : owner_name
+              mobile_number : mobile_number
             }
          });
 
-          res.status(200).json(successResponse("success", "vendor data deleted successfully",deletedVendorData));
+          res.status(200).json(successResponse("success", "vendor data deleted successfully",deteteByMobVendorApi));
   
         } catch(error) {
         console.error("Error:", error);
@@ -113,4 +114,47 @@ const updateVendorApi = async (req, res) => {
       } 
     }
 
-module.exports = {registartionVendorApi, updateVendorApi, deteteByNameVendorApi};
+
+    const loginVendorApi = async (req, res) => {
+      try {
+        const { mobile_number, password } = req.body;
+
+        // Find the vendor based on the provided mobile number
+        const vendor = await database.models.vendor_model.findOne({
+          where: { 
+            mobile_number: mobile_number
+
+           }
+        });
+
+        
+  
+        // If vendor not found
+       if(!vendor) {
+          return res.status(404).json(failureResponse("failure", "Vendor not found"));
+        }
+    
+    
+       else if (password !== vendor.password) {
+         res.status(401).json(failureResponse("failure", "Invalid password"));
+        }
+
+        // Check if mobile number and password are provided
+        else if (!mobile_number && !password) {
+          res.status(400).json(failureResponse("failure", "Please provide mobile number and password"));
+        }
+    
+        else {
+          
+        // Successful login
+         res.status(200).json(successResponse("success", "Login successful", vendor));
+        }
+
+      } catch (error) {
+
+        console.log("Error:", error);
+        return res.status(500).json(failureResponse("failure", "Login failed"));
+      }
+    };
+
+module.exports = {registartionVendorApi, updateVendorApi,deteteByMobVendorApi, loginVendorApi};
