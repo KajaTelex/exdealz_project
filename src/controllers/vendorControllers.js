@@ -91,29 +91,34 @@ const deleteVendorController = async (req,res) => {
 
 const loginApiController = async (req,res) => {
     const {mobileNumber,password} = req?.body;
-    if(!mobileNumber){
-        res.status(400).json(failureResponse("failure","Please provide Mobile Number"));
-    }
-    else if(!password){
-        res.status(400).json(failureResponse("failure","Please provide password"));
-    }
-    else{
-        const record = await database.models.vendor_model.findOne({
-            where: {mobileNumber: mobileNumber}
-        });
-        if(record){
-            const key = "12345";
-            const decryptedPassword = CryptoJS.AES.decrypt(record?.password,key);
-            if(decryptedPassword === password){
-                res.status(200).json(successResponse("success","Login Successful",record));
-            }
-            else{
-                res.status(400).json(failureResponse("failure","Login Unsuccessful"));
-            }
+    try{
+        if(!mobileNumber){
+            res.status(400).json(failureResponse("failure","Please provide Mobile Number"));
+        }
+        else if(!password){
+            res.status(400).json(failureResponse("failure","Please provide password"));
         }
         else{
-            res.status(400).json(failureResponse("failure","Vendor doesn't exist"));
+            const record = await database.models.vendor_model.findOne({
+                where: {mobileNumber: mobileNumber}
+            });
+            if(record){
+                const key = "12345";
+                const decryptedPassword = CryptoJS.AES.decrypt(record?.password,key);
+                if(decryptedPassword === password){
+                    res.status(200).json(successResponse("success","Login Successful",record));
+                }
+                else{
+                    res.status(400).json(failureResponse("failure","Login Unsuccessful"));
+                }
+            }
+            else{
+                res.status(400).json(failureResponse("failure","Vendor doesn't exist"));
+            }
         }
+    }
+    catch(error){
+        res.send(500).json(failureResponse("failure","Login failed",error));
     }
 }
 
