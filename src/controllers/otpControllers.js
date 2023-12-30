@@ -1,15 +1,13 @@
 const database = require("../../config/database_config");
 
+const { successResponse, failureResponse } = require("../utility/utility");
+
 const otpSendApiController = async (req , res) => {
    try { 
     const { mobile_number } = req.body;
 
     if(!mobile_number) {
-        res.status(401).json({
-            status: "failure",
-            message: "Please provide a valid mobile number",
-         
-        });
+        res.status(401).json(failureResponse("failure","Please provide your Mobile Number"));
         
         
     } else {
@@ -37,29 +35,25 @@ const otpSendApiController = async (req , res) => {
       if(isdata_exists === null){
         const create_otp = await database.models.otp_model.create({mobile_number, otp});
 
-        res.status(201).json({
-            status : "success",
-            message : "otp send successfully",
-            create_otp_data :create_otp
-        })
+        res.status(201).json(successResponse("success","Otp Send Successfully",create_otp));
+
           
       } else {
-               await database.models.otp_model.update({ otp},{
+             // Update the OTP for the existing mobile_number
+             await database.models.otp_model.update({otp},{
             where : {
                 mobile_number : mobile_number
             }
         });
-        const data =await database.models.otp_model.findOne({
+
+          // Fetch the updated OTP data from the database
+           const data =await database.models.otp_model.findOne({
             where : {
                 mobile_number : mobile_number
             }
     
-          })
-        res.status(201).json({
-            status : "success",
-            message : "otp update send successfully",
-            create_otp_data :data
-        })
+          }) 
+          res.status(201).json(successResponse("success","Otp Send Successfully",data));
       }
 
 
@@ -69,6 +63,9 @@ const otpSendApiController = async (req , res) => {
         status : "failure",
         message : "OTP not send successfully ,resend the OTP",
     })
+
+    res.status(500).json(failureResponse("failure","Something went wrong"))
+
     console.log("error is ",error);
    }
 } 
@@ -96,13 +93,14 @@ const otpSendApiController = async (req , res) => {
     
         } else  {
           
-            const otp_record = await database.models.otp_model
+                  await database.models.otp_model
             .findOne({
                where : {
                   mobile_number : mobileNumber,
-                
-               } 
-            })
+                  otp : verifyOtp
+
+                } 
+            });
                  
             const otp_update = await database.models.otp_model
             .update({
@@ -110,14 +108,9 @@ const otpSendApiController = async (req , res) => {
             },{
                where : {
                   mobile_number : mobileNumber,
-                
                } 
             })
-            res.status(200).json({
-                status: "success",
-                message: "OTP verified successfully",
-                
-            });
+            res.status(201).json(successResponse("success","Otp verified Successfully",otp_update))
 
         }
          

@@ -7,6 +7,8 @@ const database = require("./config/database_config");
 
 const otpRoutes = require("./src/routes/otp_routes");
 
+const vendorRoutes = require("./src/routes/vendor_routes");
+
 
 
 var corsOptions = {
@@ -20,6 +22,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api", otpRoutes);
+
+app.use("/api", vendorRoutes);
 
 
 async function init() {
