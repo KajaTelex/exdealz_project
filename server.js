@@ -6,6 +6,7 @@ const compression = require("compression");
 const database = require("./config/database_config");
 
 const otpRoutes = require("./src/routes/otp_routes");
+const vendorRoutes = require("./src/routes/vendor_routes");
 
 
 
@@ -19,7 +20,8 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use("/api", otpRoutes);
+app.use("/api/otp", otpRoutes);
+app.use("/api/vendor",vendorRoutes);
 
 
 async function init() {
