@@ -4,26 +4,26 @@ const { successResponse, failureResponse } = require("../utility/utility");
 
 const registartionVendorApi = async (req , res ) => {
     try{
-        const {mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status} = req.body;
+        const { mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image} = req.body;
 
-        const shop_image = req.body.shop_image;
-        const profile_image = req.body.profile_image;
-       /*const isMobileNum_exists =await database.models.vendor_model.findOne({
-            where : {
-                mobile_number : mobile_number
-            }
-    
-          });
+         if (mobile_number === undefined) {
+           res.status(401).json(failureResponse("failure", "mobile number has  undefined value"));
+         }
+        const isMobileNum_exists =await database.models.vendor_model.findOne({
+          where : {
+              mobile_number : mobile_number
+          }
+  
+        });
 
-          console.log(" checking data ===============================", isMobileNum_exists);
-*/
+        console.log(" checking data ===============================", isMobileNum_exists);
+
 
 
     if(!mobile_number) {
         res.status(401).json(failureResponse("failure","Please provide valid Mobile Number"));
-
-
-    }  else if(isMobileNum_exists !== null ) {
+    }
+      else if(isMobileNum_exists !== null ) {
          res.status(401).json(failureResponse("failure","mobile number is already exists in vendor table"));  
     
    } else if(password !== confirm_password) {
@@ -40,7 +40,7 @@ const registartionVendorApi = async (req , res ) => {
 
     } catch(error) {
       console.log("error=========================",error);
-        res.status(400).json(failureResponse("failure" , "Vendor registartion is not done successfully"));
+        res.status(400).json(failureResponse("failure" , "Vendor registartion is not done something went wrong"));
 
     }
 }

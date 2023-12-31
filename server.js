@@ -9,6 +9,8 @@ const otpRoutes = require("./src/routes/otp_routes");
 
 const vendorRoutes = require("./src/routes/vendor_routes");
 
+const catagoryRoutes = require("./src/routes/catagory_routes");
+
 
 
 var corsOptions = {
@@ -24,6 +26,8 @@ app.use(bodyParser.json());
 app.use("/api", otpRoutes);
 
 app.use("/api", vendorRoutes);
+
+app.use("/api",catagoryRoutes);
 
 
 async function init() {
