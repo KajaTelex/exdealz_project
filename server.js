@@ -7,6 +7,7 @@ const database = require("./config/database_config");
 
 const otpRoutes = require("./src/routes/otp_routes");
 const vendorRoutes = require("./src/routes/vendor_routes");
+const categoryRoutes = require("./src/routes/category_routes");
 
 
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 
 app.use("/api/otp", otpRoutes);
 app.use("/api/vendor",vendorRoutes);
+app.use("/api/category",categoryRoutes);
 
 
 async function init() {
