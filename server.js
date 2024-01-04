@@ -11,6 +11,8 @@ const vendorRoutes = require("./src/routes/vendor_routes");
 
 const catagoryRoutes = require("./src/routes/catagory_routes");
 
+ const vendorCatagoryRoutes = require("./src/routes/vendorCatagory_routes");
+
 
 
 var corsOptions = {
@@ -28,6 +30,8 @@ app.use("/api", otpRoutes);
 app.use("/api", vendorRoutes);
 
 app.use("/api",catagoryRoutes);
+
+app.use("/api", vendorCatagoryRoutes);
 
 
 async function init() {
@@ -47,6 +51,8 @@ async function init() {
         console.log(`unable to connect mysql database ${error}`);
     }
 }
+
+
 
 init();
 

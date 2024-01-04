@@ -1,10 +1,10 @@
 const database = require("../../config/database_config");
 
-const {successResponse, FailureResponse, failureResponse} = require("../utility/utility");
+const {successResponse, failureResponse} = require("../utility/utility");
 
 const createCatagoryApi = async( req , res) => {
     try {
-          const {id, catagory_name, catagory_image, catagory_position } = req.body;
+          const {id,catagory_name, catagory_image, catagory_position } = req.body;
 
           const isId_exists =await database.models.catagory_model.findOne({
             where : {
@@ -28,6 +28,18 @@ const createCatagoryApi = async( req , res) => {
 
         console.log("error======================",error);
         res.status(500).json(failureResponse("failure", " something went wrong",error))
+    }
+} 
+
+const getAllCatagoriesApi = async(req, res) => {
+    try {
+
+        const getAllCatagoriesData = await database.models.catagory_model.findAll();
+        res.status(201).json(successResponse("success", "All catagories data found",getAllCatagoriesData));
+
+    }catch(error) {
+        console.log("error;;;;;;;;;;;;;;;",error);
+        res.status(500).json(failureResponse("failure", " something went wrong", error))
     }
 }
 
@@ -105,4 +117,4 @@ const deleteCategoryApi = async (req, res) => {
 };
 
 
- module.exports = {createCatagoryApi, getCategoryByIdApi, updateCategoryApi, deleteCategoryApi};
+ module.exports = {createCatagoryApi,getAllCatagoriesApi, getAllCatagoriesApi, getCategoryByIdApi, updateCategoryApi, deleteCategoryApi};

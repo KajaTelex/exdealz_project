@@ -5,6 +5,8 @@ const vendorController = require("../../src/controllers/vendor_controller");
 
 router.post("/createRegistrationApi",vendorController.registartionVendorApi);
 
+router.get("/getAllVendorsDataApi", vendorController.getAllVendors);
+
 router.put("/updateRegistartionApi/:mobile_number", vendorController.updateVendorApi);
 
 router.delete("/deteteByMobVendorApi/:mobile_number", vendorController.deteteByMobVendorApi);

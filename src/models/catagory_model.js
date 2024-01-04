@@ -1,14 +1,12 @@
 
-module.exports = (Sequelize, DataTypes) => {
-    const catagory = Sequelize.define("catagory", {
+module.exports = (sequelize, DataTypes) => {
+    const catagory = sequelize.define("catagory", {
+        
+        
 
-        id : {
-           type : DataTypes.INTEGER,
-           primaryKey: true   
-        },
-       
         catagory_name : {
             type : DataTypes.STRING,
+            unique : true
         },
         catagory_image : {
             type : DataTypes.STRING,
@@ -18,5 +16,7 @@ module.exports = (Sequelize, DataTypes) => {
         }
     })
 
+
+    
     return catagory;
 }

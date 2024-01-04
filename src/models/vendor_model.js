@@ -18,11 +18,7 @@ const vendor = sequelize.define("vendor", {
         defaultValue : false
 
     },
-    categories  : {
-        type : DataTypes.STRING,
-        defaultValue : false
-
-    },
+  
     latitude  : {
         type : DataTypes.STRING,
         defaultValue : false
@@ -45,7 +41,6 @@ const vendor = sequelize.define("vendor", {
     },
     confirm_password : {
         type : DataTypes.STRING,
-        defaultValue : false
 
     },
     al_CodReferre : {
@@ -77,8 +72,12 @@ const vendor = sequelize.define("vendor", {
         type : DataTypes.STRING,
         defaultValue : false
 
+    },
+    catagory_Id : {
+        type : DataTypes.INTEGER
     }
 })
+
 
 return vendor;
 

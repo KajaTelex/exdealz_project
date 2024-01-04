@@ -4,8 +4,7 @@ const { successResponse, failureResponse } = require("../utility/utility");
 
 const registartionVendorApi = async (req , res ) => {
     try{
-        const { mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image} = req.body;
-
+        const { mobile_number,busineses_name,owner_name,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image,catagoryId} = req.body;
          if (mobile_number === undefined) {
            res.status(401).json(failureResponse("failure", "mobile number has  undefined value"));
          }
@@ -32,7 +31,7 @@ const registartionVendorApi = async (req , res ) => {
    }
          
       else {
-       const create_data = await database.models.vendor_model.create({mobile_number,busineses_name,owner_name,categories,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image});
+       const create_data = await database.models.vendor_model.create({mobile_number,busineses_name,owner_name,latitude,longitude,location_name,password,confirm_password,al_CodReferre,wallet_address,registrationType,status,shop_image,profile_image,catagoryId});
 
        res.status(201).json(successResponse("success", "vendor registrered successfully", create_data));
       }
@@ -41,15 +40,27 @@ const registartionVendorApi = async (req , res ) => {
     } catch(error) {
       console.log("error=========================",error);
         res.status(400).json(failureResponse("failure" , "Vendor registartion is not done something went wrong"));
+}
+}
 
-    }
+
+const getAllVendors = async(req, res) =>  {
+  try {
+        
+          const allVendors = await database.models.vendor_model.findAll();
+           res.status(201).json(successResponse("success","found all vendors details",allVendors ));
+         
+
+  } catch(error) {
+    res.status(500).json(failureResponse("failure", "something Went wrong", error));
+  }
 }
 
 
 const updateVendorApi = async (req, res) => {
     try {
       const mobileNumber = req.params.mobile_number;
-      const Al_CodReferre = req.body.al_CodReferre;
+      const catagoryId = req.body.catagoryId;
   
       // Find the vendor based on mobile number
       const vendor = await database.models.vendor_model.findOne({
@@ -77,7 +88,7 @@ const updateVendorApi = async (req, res) => {
         
       // Update the CodReffer
       const updateVendorData = await database.models.vendor_model.update(
-        { al_CodReferre: Al_CodReferre,
+        { catagoryId: catagoryId,
         
         },
         {
@@ -115,7 +126,7 @@ const updateVendorApi = async (req, res) => {
     }
 
 
-    const loginVendorApi = async (req, res) => {
+      const loginVendorApi = async (req, res) => {
       try {
         const { mobile_number, password } = req.body;
 
@@ -127,22 +138,23 @@ const updateVendorApi = async (req, res) => {
            }
         });
 
-        
+        console.log("Provided Password:111111111111", password);
+          console.log("Stored Password:111111111111111", vendor.password);
   
         // If vendor not found
        if(!vendor) {
           return res.status(404).json(failureResponse("failure", "Vendor not found"));
+
+        } else if (!vendor || !vendor.password) {
+          res.status(401).json(failureResponse("vendor and corrosponding vendor pwd not match"))
         }
     
     
        else if (password !== vendor.password) {
          res.status(401).json(failureResponse("failure", "Invalid password"));
+         
         }
 
-        // Check if mobile number and password are provided
-        else if (!mobile_number && !password) {
-          res.status(400).json(failureResponse("failure", "Please provide mobile number and password"));
-        }
     
         else {
           
@@ -153,8 +165,8 @@ const updateVendorApi = async (req, res) => {
       } catch (error) {
 
         console.log("Error:", error);
-        return res.status(500).json(failureResponse("failure", "Login failed"));
+        return res.status(500).json(failureResponse("failure", "Login failed",error));
       }
     };
 
-module.exports = {registartionVendorApi, updateVendorApi,deteteByMobVendorApi, loginVendorApi};
+module.exports = {registartionVendorApi, getAllVendors, updateVendorApi,deteteByMobVendorApi, loginVendorApi};
