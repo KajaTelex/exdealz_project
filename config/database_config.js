@@ -8,6 +8,8 @@ const catagoryModel = require("../src/models/catagory_model");
 
 const vendorCatagoryModel = require("../src/models/vendorCatagory_model");
 
+const forgetPasswordModel = require("../src/models/forgetPassword_model");
+
 
 const instanceSequelize = new Sequelize ("xdeals", "root", "Khaja05$", {
     host: "localhost",
@@ -20,7 +22,8 @@ models = {
 otp_model : otpModel(instanceSequelize ,DataTypes),
 vendor_model : vendorModel(instanceSequelize, DataTypes),
 catagory_model : catagoryModel(instanceSequelize, DataTypes),
-vendorCatagory_model : vendorCatagoryModel(instanceSequelize,DataTypes)
+vendorCatagory_model : vendorCatagoryModel(instanceSequelize,DataTypes),
+forgetPassword_model : forgetPasswordModel(instanceSequelize, DataTypes)
 };
 
 models.vendor_model.hasMany(models.vendorCatagory_model);

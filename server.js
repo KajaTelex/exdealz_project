@@ -13,6 +13,8 @@ const catagoryRoutes = require("./src/routes/catagory_routes");
 
  const vendorCatagoryRoutes = require("./src/routes/vendorCatagory_routes");
 
+ const forgetPasswordRoutes = require("./src/routes/forgetPassword_routes");
+
 
 
 var corsOptions = {
@@ -32,6 +34,8 @@ app.use("/api", vendorRoutes);
 app.use("/api",catagoryRoutes);
 
 app.use("/api", vendorCatagoryRoutes);
+
+app.use("/api",forgetPasswordRoutes);
 
 
 async function init() {
