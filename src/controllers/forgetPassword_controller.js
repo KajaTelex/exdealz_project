@@ -52,6 +52,7 @@ const confirmOTPAndResetPassword = async (req, res) => {
     try {
         const { mobile_number, otp, password, confirm_password } = req.body;
            console.log(req.body);
+           
         const existingOTP = await database.models.otp_model.findOne({
             where: { mobile_number: mobile_number }
         });
@@ -61,32 +62,48 @@ const confirmOTPAndResetPassword = async (req, res) => {
             where: { mobile_number: mobile_number }
         });
 
-        console.log(existingOTP);
+        console.log(vendor);
 
 
-        if (!mobile_number || !otp || !password || !confirm_password) {
-            return res.status(400).json(failureResponse("failure", "Please provide all required information"));
+
+        if (!mobile_number) {
+            return res.status(400).json(failureResponse("failure", "Please provide valid mobile number"));
         }
 
-        if (!existingOTP || existingOTP.otp !== otp) {
+      else  if (!existingOTP || existingOTP.otp !== otp) {
             return res.status(400).json(failureResponse("failure", "Invalid OTP"));
         }
 
-        if (password !== confirm_password) {
+     
+        else if (password !== confirm_password) {
+               console.log("checking@@@@@@@@@@@@@@@@@@@@@@@@@@",password,confirm_password);
             return res.status(400).json(failureResponse("failure", "Passwords do not match"));
+     
         }
 
-        if (!vendor) {
+
+       else if (!vendor) {
             return res.status(404).json(failureResponse("failure", "Vendor not found"));
         }
 
-        // Assuming your vendor model has a field called 'password' to update
-        await database.models.vendor_model.update({ password: password }, { where: { mobile_number: mobile_number } });
+        // update password and confirm password in vendor model
+      const  updatedPwdData = await database
+        .models.vendor_model.update(
+            {
+                 password: password,
+                 confirm_password : confirm_password
+             }, { 
+                
+                where: {
+                    
+                    mobile_number: mobile_number 
+                } 
+            });
 
         // Clear the OTP after successful password reset
         await database.models.otp_model.update({ otp: null }, { where: { mobile_number: mobile_number } });
 
-        return res.status(200).json(successResponse("success", "Password reset successfully"));
+        return res.status(200).json(successResponse("success", "Password reset successfully", updatedPwdData));
     } catch (error) {
         console.error("Error:", error);
         return res.status(500).json(failureResponse("failure", "Something went wrong", error));

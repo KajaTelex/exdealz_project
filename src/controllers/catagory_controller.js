@@ -54,7 +54,9 @@ const getCategoryByIdApi = async (req, res) => {
             return res.status(404).json(failureResponse("failure", "Category not found"));
         }
 
+      else {
         res.status(200).json(successResponse("success", "Category retrieved", category));
+      } 
     } catch (error) {
         console.log("error======================", error);
         res.status(500).json(failureResponse("failure", "Something went wrong", error));
@@ -63,7 +65,7 @@ const getCategoryByIdApi = async (req, res) => {
 
 const updateCategoryApi = async (req, res) => {
     try {
-        const id = req.params.id// Assuming categoryId is passed as a route parameter
+        const id = req.params.id//  categoryId is passed as a route parameter
         const { catagory_name, catagory_image, catagory_position } = req.body;
 
         // Find the category by ID in the database

@@ -97,8 +97,6 @@ const otpSendApiController = async (req , res) => {
             .findOne({
                where : {
                   mobile_number : mobileNumber,
-                  otp : verifyOtp
-
                 } 
             });
                  

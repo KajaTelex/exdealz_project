@@ -117,7 +117,7 @@ const updateVendorApi = async (req, res) => {
             }
          });
 
-          res.status(200).json(successResponse("success", "vendor data deleted successfully",deteteByMobVendorApi));
+          res.status(200).json(successResponse("success", "vendor data deleted successfully",deletedVendorData));
   
         } catch(error) {
         console.error("Error:", error);
@@ -138,9 +138,7 @@ const updateVendorApi = async (req, res) => {
            }
         });
 
-        console.log("Provided Password:111111111111", password);
-          console.log("Stored Password:111111111111111", vendor.password);
-  
+        
         // If vendor not found
        if(!vendor) {
           return res.status(404).json(failureResponse("failure", "Vendor not found"));
@@ -169,4 +167,4 @@ const updateVendorApi = async (req, res) => {
       }
     };
 
-module.exports = {registartionVendorApi, getAllVendors, updateVendorApi,deteteByMobVendorApi, loginVendorApi};
+module.exports = {registartionVendorApi, getAllVendors, updateVendorApi,deteteByMobVendorApi, loginVendorApi}; 
