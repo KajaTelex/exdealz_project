@@ -72,9 +72,6 @@ const vendor = sequelize.define("vendor", {
         type : DataTypes.STRING,
         defaultValue : false
 
-    },
-    catagory_Id : {
-        type : DataTypes.INTEGER
     }
 })
 

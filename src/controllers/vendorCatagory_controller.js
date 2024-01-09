@@ -29,7 +29,7 @@ const createVendorCatagoryApi = async (req, res) => {
 
 
    
-    res.status(201).json(successResponse("success", "vendor added new catagory", categories));
+    res.status(201).json(successResponse("success", "vendor added new catagory", createNewAssociation));
     }
     
     }catch (error) {
