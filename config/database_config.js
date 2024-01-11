@@ -20,6 +20,8 @@ const instanceSequelize = new Sequelize ("xdeals", "root", "Khaja05$", {
 
 
 
+
+
 models = {
 otp_model : otpModel(instanceSequelize ,DataTypes),
 vendor_model : vendorModel(instanceSequelize, DataTypes),

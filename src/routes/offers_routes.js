@@ -7,7 +7,7 @@ router.post("/createOfferApi", offersController.offersCreate);
 
 router.get("/getAllVendorsOffersAPi",offersController.getAllVendorsOffers);
 
-router.get("/getvendorOffersApi/:vendorCatagoryId",offersController.getvendorOffersByVendorCatagoryId);
+router.get("/getvendorOffersApi/:offerType",offersController.getvendorOffersByVendorCatagoryId);
 
 router.put("/updateofferApi/:id",offersController.updateOffers);
 

@@ -1,12 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const offer = sequelize.define("offer", {
-        id : {
-            type : DataTypes.INTEGER,
-            primaryKey: true
-        },
+       
         offerType : {
-            type : DataTypes.STRING,
-            defaultValue : ""
+            type : DataTypes.BOOLEAN,
+            defaultValue : "0"
         },
         title : {
             type : DataTypes.STRING,
@@ -16,13 +13,10 @@ module.exports = (sequelize, DataTypes) => {
             type : DataTypes.STRING,
             defaultValue : ""  
         },
-        category : {
-              type : DataTypes.STRING,
-              UNIQUE : true,
-              defaultValue : ""   
-       },
+      
        price : {
         type : DataTypes.DOUBLE,
+        
        },
        discount : {
         type : DataTypes.DOUBLE,
@@ -38,7 +32,13 @@ module.exports = (sequelize, DataTypes) => {
       images_upload : {
         type : DataTypes.STRING,
         defaultValue : ""  
-      }
+      },
+      price_range: {
+        type: DataTypes.STRING,
+    },
+    discount_range: {
+        type: DataTypes.STRING,
+    }
 })
 
   return offer;
